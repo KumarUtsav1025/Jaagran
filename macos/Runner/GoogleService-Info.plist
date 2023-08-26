@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>881757108961-0cmhoo84h52av8j5su0iluj87hg0f1a2.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.881757108961-0cmhoo84h52av8j5su0iluj87hg0f1a2</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAYYouqRJfK3Ih0R4_jXLbE2Qu4v18amio</string>
+	<key>GCM_SENDER_ID</key>
+	<string>881757108961</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.jaagran.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>ekalgsrepo-db</string>
+	<key>STORAGE_BUCKET</key>
+	<string>ekalgsrepo-db.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:881757108961:ios:b14b0776bebfedd306d5a0</string>
+	<key>DATABASE_URL</key>
+	<string>https://ekalgsrepo-db-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
