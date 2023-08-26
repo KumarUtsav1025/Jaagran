@@ -87,16 +87,14 @@ class _LoginScreenState extends State<LoginScreen>
 
       String titleText = "Authentication";
       String contextText = "Enter the Otp:";
-      _checkIfUserExists(context);
-      _enterUserOtp(context, titleText, contextText);
 
       if ((await Provider.of<AuthDetails>(context, listen: false)
               .checkIfEnteredNumberExists(context, userPhoneNumber)) ==
           true) {
-        // if ((await Provider.of<AuthDetails>(context, listen: false)
-        //         .checkIfEnteredNumberExists(context, userPhoneNumber)) ==
-        //     true) {
-        print('User Already Exists!');
+        // print('User Already Exists!');
+        // User Already Exists!
+        _enterUserOtp(context, titleText, contextText);
+
 
         setState(() {
           _showLoading = true;
@@ -122,7 +120,6 @@ class _LoginScreenState extends State<LoginScreen>
     }
   }
 
-  // Future<void> _otpVerification(BuildContext context)
   Future<void> openOtpWidget() async {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(

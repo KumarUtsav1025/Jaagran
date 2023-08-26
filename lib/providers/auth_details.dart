@@ -68,31 +68,10 @@ class AuthDetails with ChangeNotifier {
     BuildContext context,
     TextEditingController userPhoneNumber,
   ) async {
-    try {
-      final dataBaseResponse = await http.get(urlLink);
-      final extractedUserPhoneNumbers =
-          json.decode(dataBaseResponse.body) as Map<String, dynamic>;
-
-      if (extractedUserPhoneNumbers.length !=
-          this.existingUserPhoneNumberList.length) {
-        final List<String> phoneNumberList = [];
-        extractedUserPhoneNumbers.forEach(
-          (phoneId, phoneData) {
-            phoneNumberList.add(phoneData['phoneNumber']);
-          },
-        );
-
-        existingUserPhoneNumberList = phoneNumberList;
-        notifyListeners();
-      }
-    } catch (errorVal) {
-      print("Error Value");
-      print(errorVal);
-    }
-
+    await getExistingUserPhoneNumbers();
     String enteredNumber = userPhoneNumber.text.toString();
-    print(existingUserPhoneNumberList);
-    print(enteredNumber);
+
+    print(this.existingUserPhoneNumberList);
 
     if (this.existingUserPhoneNumberList.length == 0) {
       return false;
@@ -113,30 +92,5 @@ class AuthDetails with ChangeNotifier {
 
       return checkForResponse;
     }
-
-    // final urlLink = Uri.https(
-    //   'ekalgsrepo-db-default-rtdb.firebaseio.com',
-    //   '/UsersPhoneNumber.json',
-    // );
-
-    // try {
-    //   final dataBaseResponse = await http.get(urlLink);
-    //   final extractedUserPhoneNumbers = json.decode(dataBaseResponse.body) as Map<String, dynamic>;
-
-    //   if (extractedUserPhoneNumbers.length == 0) {
-    //     return false;
-    //   } else {
-    //     bool checkForResponse = await Future.forEach(
-    //       extractedUserPhoneNumbers,
-    //       (phoneElement) => {
-    //         print(phoneElement)
-    //       },
-    //     ).then((value) => false);
-
-    //     return checkForResponse;
-    //   }
-    // } catch (errorVal) {
-    //   print(errorVal);
-    // }
   }
 }
