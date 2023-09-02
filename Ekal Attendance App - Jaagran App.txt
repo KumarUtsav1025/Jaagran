@@ -1,0 +1,33 @@
+Ekal Attendance App -> Jaagran App
+
+Signup Screen Updates:
+
+	Karyakarta Types:
+		Bug -> On selecting Gram Swaraj Manch
+
+	On select Dayitva level: Village
+		After Cluster, add Other functionali⁫ty
+
+	Last Name, DOB, Home Address -> Optional
+
+Location Screen, after clicking image
+	Sthar(typo) -> Position, add 2 items in drop down:
+		Sabha Sthal / सभा स्थल 
+		Hanuman Pariwar / हनुमान परिवार
+	
+	On clicking Sabha Sthal:
+		1. Vakta ka naam / वक्ता का नाम  
+		2. Mob. No (COmpulsory) / मो. नं 
+		3. Whatsapp No / व्हाट्सएप्प नो
+		4. Village Name / गांव का नाम
+		5. Upasthit Sankhya Mahila / उपस्थित संख्या - महिला 
+		6. Upasthit Sankhya Purush / उपस्थित संख्या - पुरुष 
+	
+	On clicking Hanuman Pariwar:
+		1. Mukhya ka Naam / मुख्या का नाम 
+		2. Mob No. /  मो    नं. 
+		3. Whatsapp No. / व्हाट्सएप्प नो 
+		4. Village Name / गांव का नाम
+
+
+Encrypt all the data

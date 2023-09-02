@@ -358,27 +358,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
       String titleText = "First Name is too Short";
       String contextText = "'First Name' should have atleast 3 characters.";
       _checkForError(context, titleText, contextText);
-    } else if (_lastName.text.trim().length == 0) {
-      String titleText = "Invalid Last Name!";
-      String contextText = "Please enter your 'Last Name'...";
-      _checkForError(context, titleText, contextText);
-    } else if (_firstName.text.trim().length <= 3) {
+    }
+    // else if (_lastName.text.trim().length == 0) {
+    //   String titleText = "Invalid Last Name!";
+    //   String contextText = "Please enter your 'Last Name'...";
+    //   _checkForError(context, titleText, contextText);
+    // }
+    else if (_firstName.text.trim().length <= 3) {
       String titleText = "Last Name is too Short";
       String contextText = "'Last Name' should have atleast 3 characters.";
       _checkForError(context, titleText, contextText);
-    } else if (isDateSet == false) {
-      String titleText = "Invali Date of Birth(D.O.B)";
-      String contextText = "Please enter your Date of Birth(D.O.B)!";
-      _checkForError(context, titleText, contextText);
-    } else if (_gender.text.trim().length == 0) {
+    }
+    // else if (isDateSet == false) {
+    //   String titleText = "Invalid Date of Birth(D.O.B)";
+    //   String contextText = "Please enter your Date of Birth(D.O.B)!";
+    //   _checkForError(context, titleText, contextText);
+    // }
+    else if (_gender.text.trim().length == 0) {
       String titleText = "Invalid Gender";
       String contextText = "Please Enter your Gender/Sex!";
       _checkForError(context, titleText, contextText);
-    } else if (_homeAddress.text.trim().length <= 3) {
-      String titleText = "Invalid Address";
-      String contextText = "Please enter your complete address";
-      _checkForError(context, titleText, contextText);
-    } else {
+    }
+    // else if (_homeAddress.text.trim().length <= 3) {
+    //   String titleText = "Invalid Address";
+    //   String contextText = "Please enter your complete address";
+    //   _checkForError(context, titleText, contextText);
+    // }
+    else {
       // String titleText = "Authentication";
       // String contextText = "Enter the Otp:";
       // _enterUserOtp(context, titleText, contextText);
@@ -838,7 +844,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             // Last Name
             TextFieldContainer(
               context,
-              "Last Name/उपनाम *",
+              "Last Name/उपनाम",
               30,
               _lastName,
               TextInputType.name,
@@ -861,7 +867,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   Expanded(
                     child: Text(
                       isDateSet == false
-                          ? 'Date Of Birth  \nजन्म की तारीख *-> '
+                          ? 'Date Of Birth  \nजन्म की तारीख-> '
                           : 'D.O.B/जन्म की तारीख: ${DateFormat('dd/MM/yyyy').format(_dateOfBirth)}',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
@@ -911,7 +917,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             // Current Address
             TextFieldContainer(
               context,
-              "Home Address/घर का पता *",
+              "Home Address/घर का पता",
               100,
               _homeAddress,
               TextInputType.name,
