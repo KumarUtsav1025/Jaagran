@@ -7,13 +7,11 @@ import 'package:image_picker/image_picker.dart';
 // import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import './tabs_screen.dart';
+import '../screens/tabs_screen.dart';
 
 import '../providers/user_details.dart';
 import '../providers/auth_details.dart';
 import '../providers/hardData_details.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class SignUpScreen extends StatefulWidget {
   static const routeName = '/signup-screen';
@@ -30,7 +28,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _showLoading = false;
   bool _userVerified = false;
   bool _isSubmitClicked = false;
-  bool _isMounted = false;
 
   String _verificationId = "";
   TextEditingController _userPhoneNumber = TextEditingController();
@@ -45,8 +42,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _designationType = TextEditingController();
   final _designationRoleType = TextEditingController();
   final _dayitvaType = TextEditingController();
-  var _latitude = TextEditingController();
-  var _longitude = TextEditingController();
 
   var _defaultDayitva_PrabhagType = TextEditingController();
   var _defaultDayitva_SambhagType = TextEditingController();
@@ -133,25 +128,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void initState() {
     super.initState();
-    _isMounted = true;
     Provider.of<AuthDetails>(context, listen: false)
         .getExistingUserPhoneNumbers();
-  }
-
-  @override
-  void dispose() {
-    // Set the flag to false when the widget is being disposed
-    _isMounted = false;
-    super.dispose();
   }
 
   final genderSelectionList = ["Male/पुरुष", "Female/नारी", "Others/अन्य लिंग"];
 
   final ekalCategorySelectionList = [
+    "Karyakarta -- कार्यकर्ता",
     "Samiti -- समिति",
-    "Sevavriti",
-    "Acharya -- आचार्य",
-    "Hanuman Yoddha"
+    "Acharya -- आचार्य"
   ];
 
   final dayitvaTypeList = [
@@ -243,36 +229,114 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final visibilityForUpSanch = ["Sub-Sanch -- उपसंच", "Village -- गाव"];
   final visibilityForVillage = ["Village -- गाव"];
 
-  Future<List<double>> getCoord() async {
-    final PermissionStatus status = await Permission.location.request();
-
-    double latitude = -1;
-    double longitude = -1;
-    if (status.isGranted) {
-      try {
-        Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high,
-        );
-
-        latitude = position.latitude;
-        longitude = position.longitude;
-
-        print('Latitude: $latitude, Longitude: $longitude');
-        return [latitude, longitude];
-      } catch (e) {
-        print('Error: $e');
-      }
-      return [-1, -1];
-    } else {
-      print('Location permissions denied');
-      return [-1, -1];
-    }
-  }
-
   Future<void> _checkInputFields(BuildContext context) async {
     if (_designationType.text.trim().length == 0) {
       String titleText = "Invalid Designation Type!";
       String contextText = "Please select your 'Designation'...";
+      _checkForError(context, titleText, contextText);
+    } else if (_designationRoleType.text == "") {
+      String titleText = "Invalid Karyakarta/Samiti Type!";
+      String contextText = "Please select your Karyakarta/Samiti Type...";
+      _checkForError(context, titleText, contextText);
+    } else if (_dayitvaType.text == "") {
+      String titleText = "Invalid Dayitva Level!";
+      String contextText = "Please select your Dayitva Level...";
+      _checkForError(context, titleText, contextText);
+    } else if ((_designationType.text == "Karyakarta -- कार्यकर्ता" ||
+            _designationType.text == "Samiti -- समिति") &&
+        _dayitvaType.text == "Prabhaag -- प्रभाग" &&
+        _defaultDayitva_PrabhagType.text == "") {
+      String titleText = "Invalid Prabhag!";
+      String contextText = "Please select till Prabhag...";
+      _checkForError(context, titleText, contextText);
+    } else if ((_designationType.text == "Karyakarta -- कार्यकर्ता" ||
+            _designationType.text == "Samiti -- समिति") &&
+        _dayitvaType.text == "Sambhaag -- संभाग" &&
+        _defaultDayitva_SambhagType.text == "") {
+      String titleText = "Invalid Sambhag!";
+      String contextText = "Please select till Sambhag...";
+      _checkForError(context, titleText, contextText);
+    } else if ((_designationType.text == "Karyakarta -- कार्यकर्ता" ||
+            _designationType.text == "Samiti -- समिति") &&
+        _dayitvaType.text == "Bhaag -- भाग" &&
+        _defaultDayitva_BhagType.text == "") {
+      String titleText = "Invalid Bhag!";
+      String contextText = "Please select till Bhag...";
+      _checkForError(context, titleText, contextText);
+    } else if ((_designationType.text == "Karyakarta -- कार्यकर्ता" ||
+            _designationType.text == "Samiti -- समिति") &&
+        _dayitvaType.text == "Anchal -- अंचल" &&
+        _defaultDayitva_AnchalType.text == "") {
+      String titleText = "Invalid Anchal!";
+      String contextText = "Please select till Anchal...";
+      _checkForError(context, titleText, contextText);
+    } else if ((_designationType.text == "Karyakarta -- कार्यकर्ता" ||
+            _designationType.text == "Samiti -- समिति") &&
+        _dayitvaType.text == "Cluster -- क्लस्टर" &&
+        _defaultDayitva_ClusterType.text == "") {
+      String titleText = "Invalid Cluster!";
+      String contextText = "Please select till Cluster...";
+      _checkForError(context, titleText, contextText);
+    } else if ((_designationType.text == "Karyakarta -- कार्यकर्ता" ||
+            _designationType.text == "Samiti -- समिति") &&
+        _dayitvaType.text == "Sanch -- संच" &&
+        _defaultDayitva_SanchType.text == "") {
+      String titleText = "Invalid Sanch!";
+      String contextText = "Please select till Sanch...";
+      _checkForError(context, titleText, contextText);
+    } else if ((_designationType.text == "Karyakarta -- कार्यकर्ता" ||
+            _designationType.text == "Samiti -- समिति") &&
+        _dayitvaType.text == "Sub-Sanch -- उपसंच" &&
+        _defaultDayitva_SubSanchType.text == "") {
+      String titleText = "Invalid UpSanch!";
+      String contextText = "Please select till UpSanch...";
+      _checkForError(context, titleText, contextText);
+    } else if ((_designationType.text == "Karyakarta -- कार्यकर्ता" ||
+            _designationType.text == "Samiti -- समिति") &&
+        _dayitvaType.text == "Village -- गाव" &&
+        _defaultDayitva_VillageType.text == "") {
+      String titleText = "Invalid Village!";
+      String contextText = "Please select till Village...";
+      _checkForError(context, titleText, contextText);
+    } else if (_designationType.text == "Acharya -- आचार्य" &&
+        _defaultDayitva_PrabhagType.text.length == 0) {
+      String titleText = "Invalid Prabhag!";
+      String contextText = "Please select your Prabhag...";
+      _checkForError(context, titleText, contextText);
+    } else if (_designationType.text == "Acharya -- आचार्य" &&
+        _defaultDayitva_SambhagType.text.length == 0) {
+      String titleText = "Invalid Sambhag!";
+      String contextText = "Please select your Sambhag...";
+      _checkForError(context, titleText, contextText);
+    } else if (_designationType.text == "Acharya -- आचार्य" &&
+        _defaultDayitva_BhagType.text.length == 0) {
+      String titleText = "Invalid Bhag!";
+      String contextText = "Please select your Bhag...";
+      _checkForError(context, titleText, contextText);
+    } else if (_designationType.text == "Acharya -- आचार्य" &&
+        _defaultDayitva_AnchalType.text.length == 0) {
+      String titleText = "Invalid Anchal!";
+      String contextText = "Please select your Anchal...";
+      _checkForError(context, titleText, contextText);
+    } else if (_designationType.text == "Acharya -- आचार्य" &&
+        _defaultDayitva_ClusterType.text.length == 0) {
+      String titleText = "Invalid Cluster!";
+      String contextText = "Please select your Cluster...";
+      _checkForError(context, titleText, contextText);
+    } else if (_designationType.text == "Acharya -- आचार्य" &&
+        _defaultDayitva_SanchType.text.length == 0) {
+      String titleText = "Invalid Sanch!";
+      String contextText = "Please select your Sanch...";
+      _checkForError(context, titleText, contextText);
+    } else if (_designationType.text == "Acharya -- आचार्य" &&
+        _defaultDayitva_SubSanchType.text.length == 0) {
+      String titleText = "Invalid UpSanch!";
+      String contextText = "Please select your UpSanch...";
+      _checkForError(context, titleText, contextText);
+    } else if (_designationType.text == "Acharya -- आचार्य" &&
+        _defaultDayitva_VillageType.text.length == 0) {
+      String titleText = "Invalid Village!";
+      String contextText = "Please select your Village...";
       _checkForError(context, titleText, contextText);
     } else if (_userPhoneNumber.text.length != 10) {
       String titleText = "Invild Mobile Number";
@@ -330,42 +394,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
           false) {
         print("New User");
 
-        List<double> coordinates = await getCoord();
-        double latitude = coordinates[0], longitude = coordinates[1];
+        setState(() {
+          if (_eduQualification.text.trim().length == 0) {
+            _eduQualification.text = "No Data Available\nकोई डेटा मौजूद नहीं";
+          }
+          if (_postalCode.text.trim().length == 0) {
+            _postalCode.text = "No Data Available\nकोई डेटा मौजूद नहीं";
+          }
+          _isSubmitClicked = true;
+          _showLoading = true;
+        });
 
-        if (latitude == -1 || longitude == -1) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Please allow location permissions"),
-            ),
-          );
-          openAppSettings();
-          // final PermissionStatus status = await Permission.location.request();
-        } else {
-          setState(() {
-            if (_eduQualification.text.trim().length == 0) {
-              _eduQualification.text = "No Data Available\nकोई डेटा मौजूद नहीं";
-            }
-            if (_postalCode.text.trim().length == 0) {
-              _postalCode.text = "No Data Available\nकोई डेटा मौजूद नहीं";
-            }
-            if (_lastName.text.trim().isEmpty) {
-              _lastName.text = "No Data Available\nकोई डेटा मौजूद नहीं";
-            }
-            _latitude.text = latitude.toString();
-            _longitude.text = longitude.toString();
-            _isSubmitClicked = true;
-            _showLoading = true;
-          });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Verifying your Number..."),
+          ),
+        );
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Verifying your Number..."),
-            ),
-          );
-
-          _checkForAuthentication(context, _userPhoneNumber);
-        }
+        _checkForAuthentication(context, _userPhoneNumber);
       } else {
         print('User Already Exists!');
 
@@ -448,10 +494,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         .getHierarchyDayitvaLocationList();
 
     setState(() {
-      if (_designationType.text == "Hanuman Yoddha" ||
-          _designationType.text == "Sevavriti") {
-        alterDropDown = true;
-      }
       if (_designationType.text == "Karyakarta -- कार्यकर्ता" ||
           _designationType.text == "Samiti -- समिति") {
         alterDropDown = true;
@@ -537,12 +579,248 @@ class _SignUpScreenState extends State<SignUpScreen> {
               true,
               () => {},
             ),
+            // SizedBox(height: screenHeight * 0.015),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.grey.shade100,
+              ),
+              margin: EdgeInsets.only(
+                top: screenHeight * 0.015,
+                left: screenWidth * 0.02,
+                right: screenWidth * 0.02,
+              ),
+              child: _designationType.text == ""
+                  ? SizedBox(height: 0)
+                  : _designationType.text == "Karyakarta -- कार्यकर्ता"
+                      ? dropDownMenu(
+                          context,
+                          KaryakartaDaitvaList,
+                          _designationRoleType,
+                          "Karyakarta Types/कार्यकर्ता प्रकार *",
+                          false,
+                          () => {},
+                        )
+                      : _designationType.text == "Samiti -- समिति"
+                          ? dropDownMenu(
+                              context,
+                              SamitiDaitvaList,
+                              _designationRoleType,
+                              "Samiti Types/समिति प्रकार *",
+                              false,
+                              () => {},
+                            )
+                          : dropDownMenu(
+                              context,
+                              AcharyaDaitvaList,
+                              _designationRoleType,
+                              "Archrya Types/आचार्य प्रकार *",
+                              false,
+                              () => {},
+                            ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.grey.shade100,
+              ),
+              margin: EdgeInsets.only(
+                top: screenHeight * 0.015,
+                left: screenWidth * 0.02,
+                right: screenWidth * 0.02,
+              ),
+              child: _designationType.text == ""
+                  ? SizedBox(height: 0)
+                  : dropDownMenu(
+                      context,
+                      dayitvaTypeList,
+                      _dayitvaType,
+                      "Dayitva Level/दयात्व स्तर *",
+                      false,
+                      () => {},
+                    ),
+            ),
+            SizedBox(height: screenHeight * 0.05),
+            Padding(
+              padding: EdgeInsets.all(0),
+              child: Container(
+                child: visibilityForPrabhag.contains(_dayitvaType.text)
+                    ? Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.004),
+                        child: dropDownMenuForPrabhagDayitva(
+                          context,
+                          _defaultDayitva_PrabhagType,
+                          "Prabhag",
+                        ),
+                      )
+                    : SizedBox(
+                        height: 0,
+                      ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(0),
+              child: Container(
+                child: visibilityForSambhag.contains(_dayitvaType.text)
+                    ? Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.004),
+                        child: dropDownMenuForSambhagDayitva(
+                          context,
+                          _defaultDayitva_SambhagType,
+                          _defaultDayitva_PrabhagType,
+                          "Sambhag",
+                        ),
+                      )
+                    : SizedBox(
+                        height: 0,
+                      ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(0),
+              child: Container(
+                child: visibilityForBhag.contains(_dayitvaType.text)
+                    ? Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.004),
+                        child: dropDownMenuForBhagDayitva(
+                          context,
+                          _defaultDayitva_BhagType,
+                          _defaultDayitva_PrabhagType,
+                          _defaultDayitva_SambhagType,
+                          "Bhag",
+                        ),
+                      )
+                    : SizedBox(
+                        height: 0,
+                      ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(0),
+              child: Container(
+                child: visibilityForAnchal.contains(_dayitvaType.text)
+                    ? Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.004),
+                        child: dropDownMenuForAnchalDayitva(
+                          context,
+                          _defaultDayitva_AnchalType,
+                          _defaultDayitva_PrabhagType,
+                          _defaultDayitva_SambhagType,
+                          _defaultDayitva_BhagType,
+                          "Anchal",
+                        ),
+                      )
+                    : SizedBox(
+                        height: 0,
+                      ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(0),
+              child: Container(
+                child: visibilityForCluster.contains(_dayitvaType.text)
+                    ? Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.004),
+                        child: dropDownMenuForClusterDayitva(
+                          context,
+                          _defaultDayitva_ClusterType,
+                          _defaultDayitva_PrabhagType,
+                          _defaultDayitva_SambhagType,
+                          _defaultDayitva_BhagType,
+                          _defaultDayitva_AnchalType,
+                          "Cluster",
+                        ),
+                      )
+                    : SizedBox(
+                        height: 0,
+                      ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(0),
+              child: Container(
+                child: visibilityForSanch.contains(_dayitvaType.text)
+                    ? Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.004),
+                        child: dropDownMenuForSanchDayitva(
+                          context,
+                          _defaultDayitva_SanchType,
+                          _defaultDayitva_PrabhagType,
+                          _defaultDayitva_SambhagType,
+                          _defaultDayitva_BhagType,
+                          _defaultDayitva_AnchalType,
+                          _defaultDayitva_ClusterType,
+                          "Sanch",
+                        ),
+                      )
+                    : SizedBox(
+                        height: 0,
+                      ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(0),
+              child: Container(
+                child: visibilityForUpSanch.contains(_dayitvaType.text)
+                    ? Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.004),
+                        child: dropDownMenuForUpSanchDayitva(
+                          context,
+                          _defaultDayitva_SubSanchType,
+                          _defaultDayitva_PrabhagType,
+                          _defaultDayitva_SambhagType,
+                          _defaultDayitva_BhagType,
+                          _defaultDayitva_AnchalType,
+                          _defaultDayitva_ClusterType,
+                          _defaultDayitva_SanchType,
+                          "Up-Sanch",
+                        ),
+                      )
+                    : SizedBox(
+                        height: 0,
+                      ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(0),
+              child: Container(
+                child: visibilityForVillage.contains(_dayitvaType.text)
+                    ? Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.004),
+                        child: dropDownMenuForVillageDayitva(
+                          context,
+                          _defaultDayitva_VillageType,
+                          _defaultDayitva_PrabhagType,
+                          _defaultDayitva_SambhagType,
+                          _defaultDayitva_BhagType,
+                          _defaultDayitva_AnchalType,
+                          _defaultDayitva_ClusterType,
+                          _defaultDayitva_SanchType,
+                          _defaultDayitva_SubSanchType,
+                          "Village",
+                        ),
+                      )
+                    : SizedBox(
+                        height: 0,
+                      ),
+              ),
+            ),
             SizedBox(height: screenHeight * 0.03),
-            const Text(
-              "------------------------------------------\nEnter Personal Information\nव्यक्तिगत जानकारी दर्ज करें\n",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
+            Container(
+              child: Text(
+                "------------------------------------------\nEnter Personal Information\nव्यक्तिगत जानकारी दर्ज करें\n",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             // Mobile Number
@@ -1886,6 +2164,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
         vertical: screenHeight * 0.008,
         horizontal: screenWidth * 0.03,
       ),
+      // child: Column(
+      //   children: <Widget>[
+      //     FormHelper.dropDownWidgetWithLabel(
+      //       context,
+      //       labelName,
+      //       hintText,
+      //       inputValue,
+      //       dropDownList,
+      //       (onChangedVal) {
+      //         inputValue = onChangedVal;
+      //         setState(
+      //           () {
+      //             int idx = int.parse(onChangedVal);
+      //             _textCtr.text = dropDownList[idx - 1][optLabel];
+      //           },
+      //         );
+      //       },
+      //       (onValidateVal) {
+      //         if (onValidateVal == null) {
+      //           return "Select ${selectionInfo}";
+      //         }
+      //         return null;
+      //       },
+      //       borderColor: Colors.grey.shade100,
+      //       optionValue: "${optValue}",
+      //       optionLabel: "${optLabel}",
+      //     ),
+      //   ],
+      // ),
     );
   }
 
@@ -2038,76 +2345,72 @@ class _SignUpScreenState extends State<SignUpScreen> {
     BuildContext context,
     PhoneAuthCredential phoneAuthCredential,
   ) async {
-    if (_isMounted) {
+    setState(() {
+      _showLoading = true;
+    });
+
+    try {
+      final authCredential =
+          await _auth.signInWithCredential(phoneAuthCredential);
+
       setState(() {
-        _showLoading = true;
+        _showLoading = false;
       });
 
-      try {
-        final authCredential =
-            await _auth.signInWithCredential(phoneAuthCredential);
+      if (authCredential.user != null) {
+        print('authentication completed!');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Creating your Account...")),
+        );
+        setState(() {
+          _userVerified = true;
+          _submitOtpClicked = false;
+        });
 
+        Provider.of<UserDetails>(context, listen: false)
+            .upLoadNewUserPersonalInformation(
+          context,
+          authCredential,
+          _designationType,
+          _designationRoleType,
+          _dayitvaType,
+          _defaultDayitva_PrabhagType,
+          _defaultDayitva_SambhagType,
+          _defaultDayitva_BhagType,
+          _defaultDayitva_AnchalType,
+          _defaultDayitva_ClusterType,
+          _defaultDayitva_SanchType,
+          _defaultDayitva_SubSanchType,
+          _defaultDayitva_VillageType,
+          _userPhoneNumber,
+          _firstName,
+          _lastName,
+          _age,
+          _dateOfBirth,
+          _gender,
+          _eduQualification,
+          _homeAddress,
+          _schoolAddress,
+          _postalCode,
+          _isProfilePicTaken,
+          _profilePicture,
+        );
+
+        // Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
+      }
+    } on FirebaseAuthException catch (errorVal) {
+      print(errorVal);
+
+      if (_isOtpSent) {
         setState(() {
           _showLoading = false;
         });
 
-        if (authCredential.user != null) {
-          print('authentication completed!');
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Creating your Account...")),
-          );
-          setState(() {
-            _userVerified = true;
-            _submitOtpClicked = false;
-          });
+        String titleText = "Authentication Failed!";
+        String contextText = "Otp is InValid!";
+        _checkForError(context, titleText, contextText);
 
-          Provider.of<UserDetails>(context, listen: false)
-              .upLoadNewUserPersonalInformation(
-            context,
-            authCredential,
-            _designationType,
-            _designationRoleType,
-            _dayitvaType,
-            _defaultDayitva_PrabhagType,
-            _defaultDayitva_SambhagType,
-            _defaultDayitva_BhagType,
-            _defaultDayitva_AnchalType,
-            _defaultDayitva_ClusterType,
-            _defaultDayitva_SanchType,
-            _defaultDayitva_SubSanchType,
-            _defaultDayitva_VillageType,
-            _userPhoneNumber,
-            _firstName,
-            _lastName,
-            _age,
-            _dateOfBirth,
-            _gender,
-            _eduQualification,
-            _homeAddress,
-            _schoolAddress,
-            _postalCode,
-            _isProfilePicTaken,
-            _profilePicture,
-            _latitude,
-            _longitude
-          );
-
-          // Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
-        }
-      } on FirebaseAuthException catch (errorVal) {
-        print(errorVal);
-
-        if (_isOtpSent) {
-          setState(() {
-            _showLoading = false;
-          });
-
-          String titleText = "Authentication Failed!";
-          String contextText = "Otp is InValid!";
-          _checkForError(context, titleText, contextText);
-
-          print(errorVal.message);
-        }
+        print(errorVal.message);
       }
     }
   }

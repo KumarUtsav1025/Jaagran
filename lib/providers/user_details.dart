@@ -253,6 +253,8 @@ class UserDetails with ChangeNotifier {
     TextEditingController postalCode,
     bool profilePicAvailable,
     File profilePicFile,
+    TextEditingController latitude,
+    TextEditingController longitude,
   ) async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     CollectionReference usersRef = db.collection("userPersonalInformation");
@@ -310,6 +312,9 @@ class UserDetails with ChangeNotifier {
           'mobile_Number': userPhoneNumber.text.toString(),
           'creation_Timing': DateTime.now().toString(),
           'profilePic_Url': "",
+          'latitude': latitude.text.toString(),
+          'longitude': longitude.text.toString()
+          
           // 'state': state_Name.text.toString(),
           // 'region': region_Name.text.toString(),
           // 'district': district_Name.text.toString(),
@@ -376,6 +381,8 @@ class UserDetails with ChangeNotifier {
           'mobile_Number': userPhoneNumber.text.toString(),
           'creation_Timing': DateTime.now().toString(),
           'profilePic_Url': classroomImageUrl.toString(),
+          'latitude': latitude.text.toString(),
+          'longitude': longitude.text.toString()
           // 'state': state_Name.text.toString(),
           // 'region': region_Name.text.toString(),
           // 'district': district_Name.text.toString(),

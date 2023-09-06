@@ -17,7 +17,7 @@ Location Screen, after clicking image
 	
 	On clicking Sabha Sthal:
 		1. Vakta ka naam / वक्ता का नाम  
-		2. Mob. No (COmpulsory) / मो. नं 
+		2. Mob. No (Compulsory) / मो. नं 
 		3. Whatsapp No / व्हाट्सएप्प नो
 		4. Village Name / गांव का नाम
 		5. Upasthit Sankhya Mahila / उपस्थित संख्या - महिला 

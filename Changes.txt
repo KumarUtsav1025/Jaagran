@@ -1,0 +1,25 @@
+App requirment
+Content in English n Hindi
+
+1. Change logo
+2. Change app name to Sampark 
+
+3. Required 
+A. Sign up - Person registration categary - name, Mobile no. And Photo with co-ordinate
+
+i. Samiti
+ii.Sevavrati
+iii. Acharya
+iv. Hanuman Yodhha 
+
+4. After sign up - Sampark reporting by clicking 
+
+A. Hanuman pariwar or 
+B. Sabha
+C. Samasya / Sujhaav 
+
+Hanuman pariwar --> contact no
+
+Sabha --> Present Male nos,   female nos, , Name of Vakta Vakta Mob. No.  
+
+Samasya / Sujhaav --> Radio button (Samasya / Sujhaav ) , Name of person , Mob. No. , Category (drop down - Data later ) , Detail of problem ()
