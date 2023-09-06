@@ -14,19 +14,20 @@ class S{
   static const profileTitle = 'बाह्य रूपरेखा';
 
   //NewClassScreen Strings
-  static const invalidStudentCountErr = "Invild Student Count";
-  static const invalidStudentCountErrSub = "Entered Number of Students!";
-  static const classSubmitText = 'Submitting the Class!\nजमा करने की प्रक्रिया में|';
-  static const newClassScreenBodyText ="Register any event\n-------------------------------------------\nअपनी उपस्थिति दर्ज कराएं";
-  static const newClassPicText = 'Picture of the Class\nकक्षा की तस्वीर';
-  static const newClassStudentNumText = "Number of Students/विद्यार्थियों की संख्या:";
-  static const newClassSubmitText = 'Submit the Class\nकक्षा जमा करें';
-  static const newClassAddressTitle = 'Class Address/कक्षा का पता:';
+  static const invalidStudentCountErr = "Invild Attendee Count";
+  static const invalidStudentCountErrSub = "Entered Number of Attendees!";
+  static const classSubmitText = 'Submitting the Event!\nजमा करने की प्रक्रिया में|';
+  static const newClassScreenBodyText ="Register any Event\n-------------------------------------------\nघटना को पंजीकृत करें";
+  static const newClassPicText = 'Picture of the Event\nघटना की तस्वीर';
+  static const newClassMaleNumText = "Number of Male/पुरुष की संख्या:";
+  static const newClassFemaleNumText = "Number of Female/महिला की संख्या:";
+  static const newClassSubmitText = 'Submit the Event\nघटना जमा करें';
+  static const newClassAddressTitle = 'Event Address/घटना का पता:';
   static const newClassPicClickText = "Click a Pic\nतस्वीर क्लिक करें";
 
 
   //PreviousClass Strings
-  static const prevClassBodyText = 'No Attendence has been Registered.!\n-----------------\nकोई उपस्थिति दर्ज नहीं की गई है।';
+  static const prevClassBodyText = 'No Event has been Registered.!\n-----------------\nकोई घटना दर्ज नहीं की गई है।';
 
 
   //CreateClassScreen Strings

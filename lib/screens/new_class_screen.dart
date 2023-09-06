@@ -29,10 +29,10 @@ class NewClassScreen extends StatefulWidget {
   static const routeName = '/new-class-screen';
 
   const NewClassScreen({super.key});
-
   @override
   State<NewClassScreen> createState() => _NewClassScreenState();
 }
+enum probSolSelectionList{ Samasya, Sujhaav }
 
 class _NewClassScreenState extends State<NewClassScreen> {
   bool _isFloatingButtonActive = true;
@@ -46,9 +46,32 @@ class _NewClassScreenState extends State<NewClassScreen> {
   bool _isClassCreated = false;
 
   bool _numberStudents = false;
+  TextEditingController maleNumber = new TextEditingController();
+  TextEditingController femaleNumber = new TextEditingController();
   TextEditingController numStudents = new TextEditingController();
+  TextEditingController _categorySelected = TextEditingController();
+  TextEditingController _vaktaName = TextEditingController();
+  TextEditingController _userPhoneNumber = TextEditingController();
+  TextEditingController _problemDesc = TextEditingController();
+  TextEditingController _problemType = TextEditingController();
+  TextEditingController _probCategory = TextEditingController();
+
+
 
   final loc.Location location = loc.Location();
+  final ekalCategorySelectionList = [
+    "Hanuman pariwar",
+    "Samiti",
+    "Samasya/Sujhaav",
+  ];
+  final probCategorySelectionList = [
+    "NA",
+    "NA",
+    "NA",
+  ];
+
+
+
   StreamSubscription<loc.LocationData>? _locationSubscription;
   var latitudeValue = 'Getting Latitude...'.obs;
   var longitudeValue = 'Getting Longitude...'.obs;
@@ -335,15 +358,20 @@ class _NewClassScreenState extends State<NewClassScreen> {
                                     ),
                                   ),
                                 ),
+                                dropDownMenu(
+                                  context,
+                                  ekalCategorySelectionList,
+                                  _categorySelected,
+                                  "Event Type/ प्रकार *",
+                                  true,
+                                      () => {},
+                                ),
+                                SizedBox(
+                                  height: useableHeight * 0.02,
+                                ),
+                                optionDependMenu(context),
                                 SizedBox(
                                   height: useableHeight * 0.01,
-                                ),
-                                TextFieldContainer(
-                                  context,
-                                  S.newClassStudentNumText,
-                                  3,
-                                  numStudents,
-                                  TextInputType.number,
                                 ),
                                 SizedBox(
                                   height: useableHeight * 0.02,
@@ -372,6 +400,7 @@ class _NewClassScreenState extends State<NewClassScreen> {
                                             color: Colors.white,
                                           ),
                                     onPressed: () {
+
                                       _submitTheClassInformation(
                                         context,
                                         scaffoldKey,
@@ -406,18 +435,18 @@ class _NewClassScreenState extends State<NewClassScreen> {
                                 SizedBox(
                                   height: useableHeight * 0.02,
                                 ),
-                                Container(
-                                  child: Text(
-                                    "${S.newClassStudentNumText} $_numberOfStudents",
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: useableHeight * 0.02,
-                                ),
+                                // Container(
+                                //   child: Text(
+                                //     "Number o $_numberOfStudents",
+                                //     textAlign: TextAlign.center,
+                                //     style: const TextStyle(
+                                //       fontWeight: FontWeight.bold,
+                                //     ),
+                                //   ),
+                                // ),
+                                // SizedBox(
+                                //   height: useableHeight * 0.02,
+                                // ),
                                 Container(
                                   child: Text(
                                     "--------------------------------------------\n${S.newClassAddressTitle} \n\n${addressValue.value}",
@@ -481,6 +510,156 @@ class _NewClassScreenState extends State<NewClassScreen> {
     );
   }
 
+  Widget optionDependMenu(BuildContext context){
+    if(_categorySelected.text ==  "Hanuman pariwar") return hanumanParivar(context);
+    if(_categorySelected.text ==  "Samiti") return samitiCategory(context);
+    if(_categorySelected.text ==  "Samasya/Sujhaav") return samasyaCategory(context);
+    return Container();
+  }
+  //hanumanParivar DropdownMenu
+  Widget hanumanParivar(BuildContext context){
+    return TextFieldContainer(
+      context,
+      "Mobile Number/मोबाइल नंबर *",
+      10,
+      _userPhoneNumber,
+      TextInputType.number,
+    );
+  }
+
+  //Samiti DropdownMenu
+  Widget samitiCategory(BuildContext context){
+    var screenHeight = MediaQuery.of(context).size.height;
+    var screenWidth = MediaQuery.of(context).size.width;
+    var topInsets = MediaQuery.of(context).viewInsets.top;
+    var bottomInsets = MediaQuery.of(context).viewInsets.bottom;
+    var useableHeight = screenHeight - topInsets - bottomInsets;
+    return Column(
+      children: [
+        TextFieldContainer(
+          context,
+          S.newClassMaleNumText,
+          3,
+          maleNumber,
+          TextInputType.number,
+        ),
+        SizedBox(
+          height: useableHeight * 0.02,
+        ),
+        TextFieldContainer(
+          context,
+          S.newClassFemaleNumText,
+          3,
+          femaleNumber,
+          TextInputType.number,
+        ),
+        SizedBox(
+          height: useableHeight * 0.02,
+        ),
+        TextFieldContainer(
+          context,
+          "Name of Vakta *",
+          30,
+          _vaktaName,
+          TextInputType.text,
+        ),
+        SizedBox(
+          height: useableHeight * 0.02,
+        ),
+        TextFieldContainer(
+          context,
+          "Mobile Number/मोबाइल नंबर *",
+          10,
+          _userPhoneNumber,
+          TextInputType.number,
+        )
+      ],
+    );
+  }
+
+  //Samasya /Sujhav dropdownlist
+  Widget samasyaCategory(BuildContext context){
+    var screenHeight = MediaQuery.of(context).size.height;
+    var screenWidth = MediaQuery.of(context).size.width;
+    var topInsets = MediaQuery.of(context).viewInsets.top;
+    var bottomInsets = MediaQuery.of(context).viewInsets.bottom;
+    var useableHeight = screenHeight - topInsets - bottomInsets;
+
+    probSolSelectionList? _character = probSolSelectionList.Samasya;
+    _problemType.text = _character.name;
+
+    return Column(
+      children: [
+        ListTile(
+          title: const Text('Samasya'),
+          leading: Radio<probSolSelectionList>(
+            value: probSolSelectionList.Samasya,
+            groupValue: _character,
+            onChanged: (probSolSelectionList? value) {
+              setState(() {
+                _character = value;
+                _problemType.text = _character!.name;
+              });
+            },
+          ),
+        ),
+        ListTile(
+          title: const Text('Sujhaav'),
+          leading: Radio<probSolSelectionList>(
+            value: probSolSelectionList.Sujhaav,
+            groupValue: _character,
+            onChanged: (probSolSelectionList? value) {
+              setState(() {
+                _character = value;
+                _problemType.text = _character!.name;
+              });
+            },
+          ),
+        ),
+        SizedBox(
+          height: useableHeight * 0.02,
+        ),
+        TextFieldContainer(
+          context,
+          "Name of Person *",
+          30,
+          _vaktaName,
+          TextInputType.text,
+        ),
+        SizedBox(
+          height: useableHeight * 0.02,
+        ),
+        TextFieldContainer(
+          context,
+          "Mobile Number/मोबाइल नंबर *",
+          10,
+          _userPhoneNumber,
+          TextInputType.number,
+        ),
+        SizedBox(
+          height: useableHeight * 0.02,
+        ),
+        dropDownMenu(
+          context,
+          probCategorySelectionList,
+          _probCategory,
+          "Samasya/Sujhaav Category *",
+          true,
+              () => {},
+        ),
+        SizedBox(
+          height: useableHeight * 0.02,
+        ),
+        TextFieldContainer(
+          context,
+          "Detail of Problem *",
+          300,
+          _problemDesc,
+          TextInputType.text,
+        )
+      ],
+    );
+  }
   /////////////////////////////////// Location Services ///////////////////////////////////
 
   _getLocation(BuildContext context, String userUniqueId) async {
@@ -703,6 +882,70 @@ class _NewClassScreenState extends State<NewClassScreen> {
       print("MEMERR12");
     }
   }
+  Widget dropDownMenu(
+      BuildContext context,
+      List<String> dropDownList,
+      TextEditingController _textCtr,
+      String hintText,
+      bool callFunction,
+      functionCall(),
+      ) {
+    var screenHeight = MediaQuery.of(context).size.height;
+    var screenWidth = MediaQuery.of(context).size.width;
+    var topInsets = MediaQuery.of(context).viewInsets.top;
+    var bottomInsets = MediaQuery.of(context).viewInsets.bottom;
+    var useableHeight = screenHeight - topInsets - bottomInsets;
+
+    if (callFunction) {
+      functionCall();
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.grey.shade100,
+      ),
+      margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
+      padding: EdgeInsets.symmetric(
+        vertical: screenHeight * 0.02,
+        horizontal: screenWidth * 0.03,
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          hint: Align(
+            alignment: Alignment.centerLeft,
+            child: _textCtr.text.length == 0
+                ? Text("${hintText}")
+                : Text(
+              "${_textCtr.text}",
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+          isDense: true,
+          isExpanded: true,
+          iconSize: 35,
+          icon: Icon(
+            Icons.arrow_drop_down,
+            color: Colors.black,
+          ),
+          onTap: () {},
+          items: dropDownList.map(buildMenuItem).toList(),
+          onChanged: (value) => setState(() {
+            _textCtr.text = value!;
+          }),
+        ),
+      ),
+    );
+  }
+  DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
+    value: item,
+    child: Text(
+      item,
+      style: TextStyle(
+        fontWeight: FontWeight.normal,
+      ),
+    ),
+  );
 }
 
 class FacePainter extends CustomPainter {
