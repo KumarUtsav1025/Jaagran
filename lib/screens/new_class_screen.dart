@@ -57,6 +57,8 @@ class _NewClassScreenState extends State<NewClassScreen> {
   TextEditingController _problemType = TextEditingController();
   TextEditingController _probCategory = TextEditingController();
 
+  probSolSelectionList _character = probSolSelectionList.Sujhaav;
+
   final loc.Location location = loc.Location();
   final ekalCategorySelectionList = [
     "Hanuman Pariwar",
@@ -64,9 +66,9 @@ class _NewClassScreenState extends State<NewClassScreen> {
     "Samasya/Sujhaav",
   ];
   final probCategorySelectionList = [
-    "NA",
-    "NA",
-    "NA",
+    "1",
+    "2",
+    "3",
   ];
 
   StreamSubscription<loc.LocationData>? _locationSubscription;
@@ -346,7 +348,7 @@ class _NewClassScreenState extends State<NewClassScreen> {
                             height: 0,
                           )
                         : SizedBox(
-                            height: screenHeight * 1.5,
+                            height: screenHeight * 2.0,
                             width: screenWidth * 0.9,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -377,6 +379,9 @@ class _NewClassScreenState extends State<NewClassScreen> {
                                       width: double.infinity,
                                     ),
                                   ),
+                                ),
+                                SizedBox(
+                                  height: useableHeight * 0.02,
                                 ),
                                 dropDownMenu(
                                   context,
@@ -454,18 +459,18 @@ class _NewClassScreenState extends State<NewClassScreen> {
                                 SizedBox(
                                   height: useableHeight * 0.02,
                                 ),
-                                // Container(
-                                //   child: Text(
-                                //     "Number o $_numberOfStudents",
-                                //     textAlign: TextAlign.center,
-                                //     style: const TextStyle(
-                                //       fontWeight: FontWeight.bold,
-                                //     ),
-                                //   ),
-                                // ),
-                                // SizedBox(
-                                //   height: useableHeight * 0.02,
-                                // ),
+                                Container(
+                                  child: Text(
+                                    "Number of Attendees $_numberOfStudents",
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: useableHeight * 0.02,
+                                ),
                                 Container(
                                   child: Text(
                                     "--------------------------------------------\n${S.newClassAddressTitle} \n\n${addressValue.value}",
@@ -600,15 +605,15 @@ class _NewClassScreenState extends State<NewClassScreen> {
   }
 
   // Samasya/Sujhav dropdownlist
+
   Widget samasyaCategory(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
     var topInsets = MediaQuery.of(context).viewInsets.top;
     var bottomInsets = MediaQuery.of(context).viewInsets.bottom;
     var useableHeight = screenHeight - topInsets - bottomInsets;
-
-    probSolSelectionList? _character = probSolSelectionList.Samasya;
     _problemType.text = _character.name;
+
 
     return Column(
       children: [
@@ -618,8 +623,10 @@ class _NewClassScreenState extends State<NewClassScreen> {
             value: probSolSelectionList.Samasya,
             groupValue: _character,
             onChanged: (probSolSelectionList? value) {
+              print(value);
               setState(() {
-                _character = value;
+                print("Hi");
+                _character = value!;
                 _problemType.text = _character!.name;
               });
             },
@@ -631,8 +638,10 @@ class _NewClassScreenState extends State<NewClassScreen> {
             value: probSolSelectionList.Sujhaav,
             groupValue: _character,
             onChanged: (probSolSelectionList? value) {
+              print(value);
               setState(() {
-                _character = value;
+                print(value);
+                _character = value!;
                 _problemType.text = _character!.name;
               });
             },
@@ -960,6 +969,7 @@ class _NewClassScreenState extends State<NewClassScreen> {
       ),
     );
   }
+
 
   DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
         value: item,
