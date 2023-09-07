@@ -13,6 +13,14 @@ class ClassInformation {
   final String currAddress;
   String classroomUrl;
   final File imageFile;
+  final String eventType;
+  final String maleNumber;
+  final String femaleNumber;
+  final String vaktaName;
+  final String mobileNumber;
+  final String subEventType;
+  final String nameOfPerson;
+  final String problemDetails;
 
   ClassInformation({
     required this.unqId,
@@ -25,5 +33,13 @@ class ClassInformation {
     required this.currAddress,
     required this.classroomUrl,
     required this.imageFile,
+    required this.eventType,
+    required this.maleNumber,
+    required this.femaleNumber,
+    required this.vaktaName,
+    required this.mobileNumber,
+    required this.subEventType,
+    required this.nameOfPerson,
+    required this.problemDetails
   });
 }

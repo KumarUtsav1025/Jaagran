@@ -20,6 +20,6 @@ C. Samasya / Sujhaav
 
 Hanuman pariwar --> contact no
 
-Sabha --> Present Male nos,   female nos, , Name of Vakta Vakta Mob. No.  
+Sabha --> Present Male nos, female nos, Name of Vakta Vakta Mob. No.
 
 Samasya / Sujhaav --> Radio button (Samasya / Sujhaav ) , Name of person , Mob. No. , Category (drop down - Data later ) , Detail of problem ()

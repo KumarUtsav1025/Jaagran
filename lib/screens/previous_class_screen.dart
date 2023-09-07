@@ -17,18 +17,25 @@ class PreviousClass extends StatefulWidget {
 }
 
 class _PreviousClassState extends State<PreviousClass> {
-  ClassInformation nullClassInfo = new ClassInformation(
-    unqId: "",
-    currDateTime: "",
-    currTime: "",
-    currDate: "",
-    numOfStudents: 0,
-    currLatitude: 0.0,
-    currLongitude: 0.0,
-    currAddress: "",
-    classroomUrl: "",
-    imageFile: File(""),
-  );
+  ClassInformation nullClassInfo = ClassInformation(
+      unqId: "",
+      currDateTime: "",
+      currTime: "",
+      currDate: "",
+      numOfStudents: 0,
+      currLatitude: 0.0,
+      currLongitude: 0.0,
+      currAddress: "",
+      classroomUrl: "",
+      imageFile: File(""),
+      eventType: "",
+      maleNumber: "",
+      femaleNumber: "",
+      vaktaName: "",
+      mobileNumber: "",
+      subEventType: "",
+      nameOfPerson: "",
+      problemDetails: "");
 
   var _isInit = true;
 
@@ -119,65 +126,13 @@ class _PreviousClassState extends State<PreviousClass> {
                 child: ListView.builder(
                   itemCount: classInfoData.items.length,
                   itemBuilder: (ctx, index) {
-                    if (classInfoData.items.length % 2 == 0) {
-                      if (index % 2 == 0) {
-                        if (index == classInfoData.items.length - 1) {
-                          return OldClassView(
-                            indexClass1: classInfoData.items.length - 1 - index,
-                            indexClass2: -1,
-                            infoClass1: classInfoData
-                                .items[classInfoData.items.length - 1 - index],
-                            infoClass2: nullClassInfo,
-                          );
-                        } else {
-                          return OldClassView(
-                            indexClass1: classInfoData.items.length - 2 - index,
-                            indexClass2: classInfoData.items.length - 1 - index,
-                            infoClass1: classInfoData
-                                .items[classInfoData.items.length - 2 - index],
-                            infoClass2: classInfoData
-                                .items[classInfoData.items.length - 1 - index],
-                          );
-                        }
-                      } else {
-                        return SizedBox(
-                          height: 0,
-                        );
-                      }
-                    } else {
-                      if (index == 0) {
-                        return OldClassView(
-                          indexClass1: classInfoData.items.length - 1 - index,
-                          indexClass2: -1,
-                          infoClass1: classInfoData
-                              .items[classInfoData.items.length - 1 - index],
-                          infoClass2: nullClassInfo,
-                        );
-                      } else if (index % 2 != 0) {
-                        if (index == classInfoData.items.length - 1) {
-                          return OldClassView(
-                            indexClass1: classInfoData.items.length - 1 - index,
-                            indexClass2: -1,
-                            infoClass1: classInfoData
-                                .items[classInfoData.items.length - 1 - index],
-                            infoClass2: nullClassInfo,
-                          );
-                        } else {
-                          return OldClassView(
-                            indexClass1: classInfoData.items.length - 2 - index,
-                            indexClass2: classInfoData.items.length - 1 - index,
-                            infoClass1: classInfoData
-                                .items[classInfoData.items.length - 2 - index],
-                            infoClass2: classInfoData
-                                .items[classInfoData.items.length - 1 - index],
-                          );
-                        }
-                      } else {
-                        return SizedBox(
-                          height: 0,
-                        );
-                      }
-                    }
+                    return OldClassView(
+                      indexClass1: classInfoData.items.length - 1 - index,
+                      indexClass2: -1,
+                      infoClass1: classInfoData
+                          .items[classInfoData.items.length - 1 - index],
+                      infoClass2: nullClassInfo,
+                    );
                   },
                 ),
               ),

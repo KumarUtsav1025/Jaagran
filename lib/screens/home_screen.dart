@@ -44,13 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     int cntClasses = classInfoData.items.length;
 
-    if (cntClasses % 2 == 0) {
-      cntClasses = (cntClasses / 2).floor();
-    } else {
-      cntClasses = (cntClasses / 2).floor();
-      cntClasses += 1;
-    }
-
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Container(

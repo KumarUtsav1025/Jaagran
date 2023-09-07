@@ -19,8 +19,8 @@ class S{
   static const classSubmitText = 'Submitting the Event!\nजमा करने की प्रक्रिया में|';
   static const newClassScreenBodyText ="Register any Event\n-------------------------------------------\nघटना को पंजीकृत करें";
   static const newClassPicText = 'Picture of the Event\nघटना की तस्वीर';
-  static const newClassMaleNumText = "Number of Male/पुरुष की संख्या:";
-  static const newClassFemaleNumText = "Number of Female/महिला की संख्या:";
+  static const newClassMaleNumText = "Number of Male/पुरुष की संख्या: *";
+  static const newClassFemaleNumText = "Number of Female/महिला की संख्या: *";
   static const newClassSubmitText = 'Submit the Event\nघटना जमा करें';
   static const newClassAddressTitle = 'Event Address/घटना का पता:';
   static const newClassPicClickText = "Click a Pic\nतस्वीर क्लिक करें";

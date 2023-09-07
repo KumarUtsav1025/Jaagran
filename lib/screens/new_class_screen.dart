@@ -32,7 +32,8 @@ class NewClassScreen extends StatefulWidget {
   @override
   State<NewClassScreen> createState() => _NewClassScreenState();
 }
-enum probSolSelectionList{ Samasya, Sujhaav }
+
+enum probSolSelectionList { Samasya, Sujhaav }
 
 class _NewClassScreenState extends State<NewClassScreen> {
   bool _isFloatingButtonActive = true;
@@ -56,12 +57,10 @@ class _NewClassScreenState extends State<NewClassScreen> {
   TextEditingController _problemType = TextEditingController();
   TextEditingController _probCategory = TextEditingController();
 
-
-
   final loc.Location location = loc.Location();
   final ekalCategorySelectionList = [
-    "Hanuman pariwar",
-    "Samiti",
+    "Hanuman Pariwar",
+    "Sabha",
     "Samasya/Sujhaav",
   ];
   final probCategorySelectionList = [
@@ -69,8 +68,6 @@ class _NewClassScreenState extends State<NewClassScreen> {
     "NA",
     "NA",
   ];
-
-
 
   StreamSubscription<loc.LocationData>? _locationSubscription;
   var latitudeValue = 'Getting Latitude...'.obs;
@@ -168,79 +165,102 @@ class _NewClassScreenState extends State<NewClassScreen> {
     GlobalKey<ScaffoldState> sKey,
   ) async {
     ClassInformation classInfo = ClassInformation(
-      unqId: DateTime.now().toString() + _picTiming.toString(),
-      currDateTime: _picTiming.toString(),
-      currTime: DateFormat.jm().format(_picTiming).toString(),
-      currDate: DateFormat.yMMMd('en_US').format(_picTiming).toString(),
-      numOfStudents: _numberOfStudents,
-      currLatitude: double.parse(latitudeValue.value),
-      currLongitude: double.parse(longitudeValue.value),
-      currAddress: addressValue.value,
-      classroomUrl: "",
-      imageFile: _storedImage,
+        unqId: DateTime.now().toString() + _picTiming.toString(),
+        currDateTime: _picTiming.toString(),
+        currTime: DateFormat.jm().format(_picTiming).toString(),
+        currDate: DateFormat.yMMMd('en_US').format(_picTiming).toString(),
+        numOfStudents: _numberOfStudents,
+        currLatitude: double.parse(latitudeValue.value),
+        currLongitude: double.parse(longitudeValue.value),
+        currAddress: addressValue.value,
+        classroomUrl: "",
+        imageFile: _storedImage,
+        eventType: _categorySelected.text,
+        maleNumber: maleNumber.text,
+        femaleNumber: femaleNumber.text,
+        vaktaName: _vaktaName.text,
+        mobileNumber: _userPhoneNumber.text,
+        subEventType: _categorySelected.text == "Samasya/Sujhaav" ? "test" : "",
+        nameOfPerson:
+            _categorySelected.text == "Samasya/Sujhaav" ? _vaktaName.text : "",
+        problemDetails: _problemDesc.text);
+
+    if (_categorySelected.text == "Sabha") {
+      if (maleNumber.text == "" ||
+          femaleNumber.text == "" ||
+          _vaktaName.text == "" ||
+          _userPhoneNumber.text == "") {
+        _checkForError(context, "Missing Details",
+            "Please fill all the above details\nकृपया उपरोक्त सभी विवरण भरें");
+        return;
+      }
+      if (_userPhoneNumber.text.length < 10) {
+        _checkForError(context, "Invalid Phone Number",
+            "Please enter a valid phone number\nकृपया एक मान्य फ़ोन नंबर दर्ज करे");
+        return;
+      }
+    } else if (_categorySelected.text == "Hanuman Pariwar") {
+      print("1");
+      return;
+    } else if (_categorySelected.text == "Samasya/Sujhaav") {
+      print("2");
+      return;
+    } else {
+      _checkForError(context, "Missing Details",
+          "Please select an event type\nकृपया एक इवेंट प्रकार चुनें");
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(S.classSubmitText),
+      ),
     );
 
-    if (int.tryParse(numStudents.text) == null) {
-      String titleText = S.invalidStudentCountErr;
-      String contextText = S.invalidStudentCountErrSub;
-      _checkForError(context, titleText, contextText);
-    } else if (int.parse(numStudents.text) < 0) {
-      String titleText = S.invalidStudentCountErr;
-      String contextText = S.invalidStudentCountErrSub;
-      _checkForError(context, titleText, contextText);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(S.classSubmitText),
-        ),
-      );
+    try {
+      setState(() {
+        _isSubmitLoadingSpinner = true;
+      });
+    } catch (error) {
+      print("MEMERR2");
+    }
 
-      try {
-        setState(() {
-          _isSubmitLoadingSpinner = true;
-        });
-      } catch (error) {
-        print("MEMERR2");
-      }
+    try {
+      Provider.of<ClassDetails>(context, listen: false)
+          .addNewClass(classInfo, _storedImage, numStudents)
+          .catchError((onError) {
+        print(onError);
+        _checkForError(
+          context,
+          S.errorTitle,
+          S.errorSub,
+          popVal: true,
+        );
+      }).then((_) {
+        // Scaffold.of(context).showSnackBar(
+        //     SnackBar(content: Text('Class Submitted Successfully!')));
+        try {
+          setState(() {
+            _isFloatingButtonActive = true;
+            _isSpinnerLoading = false;
+            _isCurrentLocationAccessGiven = false;
+            _isCurrentLocationTaken = false;
+            _isCameraOpened = false;
+            _isClassPictureTaken = false;
+            _isSubmitLoadingSpinner = false;
+            _getAddressFunc = false;
 
-      try {
-        Provider.of<ClassDetails>(context, listen: false)
-            .addNewClass(classInfo, _storedImage, numStudents)
-            .catchError((onError) {
-          print(onError);
-          _checkForError(
-            context,
-            S.errorTitle,
-            S.errorSub,
-            popVal: true,
-          );
-        }).then((_) {
-          // Scaffold.of(context).showSnackBar(
-          //     SnackBar(content: Text('Class Submitted Successfully!')));
-          try {
-            setState(() {
-              _isFloatingButtonActive = true;
-              _isSpinnerLoading = false;
-              _isCurrentLocationAccessGiven = false;
-              _isCurrentLocationTaken = false;
-              _isCameraOpened = false;
-              _isClassPictureTaken = false;
-              _isSubmitLoadingSpinner = false;
-              _getAddressFunc = false;
+            _isSubmitLoadingSpinner = false;
+          });
+        } catch (error) {
+          print("MEMERR3");
+        }
 
-              _isSubmitLoadingSpinner = false;
-            });
-          } catch (error) {
-            print("MEMERR3");
-          }
-
-          // Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil("/tab-screen", (route) => false);
-        });
-      } catch (errorVal) {
-        _checkForError(context, S.errorTitle, S.errorSub);
-      }
+        // Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil("/tab-screen", (route) => false);
+      });
+    } catch (errorVal) {
+      _checkForError(context, S.errorTitle, S.errorSub);
     }
   }
 
@@ -364,7 +384,7 @@ class _NewClassScreenState extends State<NewClassScreen> {
                                   _categorySelected,
                                   "Event Type/ प्रकार *",
                                   true,
-                                      () => {},
+                                  () => {},
                                 ),
                                 SizedBox(
                                   height: useableHeight * 0.02,
@@ -400,7 +420,6 @@ class _NewClassScreenState extends State<NewClassScreen> {
                                             color: Colors.white,
                                           ),
                                     onPressed: () {
-
                                       _submitTheClassInformation(
                                         context,
                                         scaffoldKey,
@@ -510,14 +529,17 @@ class _NewClassScreenState extends State<NewClassScreen> {
     );
   }
 
-  Widget optionDependMenu(BuildContext context){
-    if(_categorySelected.text ==  "Hanuman pariwar") return hanumanParivar(context);
-    if(_categorySelected.text ==  "Samiti") return samitiCategory(context);
-    if(_categorySelected.text ==  "Samasya/Sujhaav") return samasyaCategory(context);
+  Widget optionDependMenu(BuildContext context) {
+    if (_categorySelected.text == "Hanuman Pariwar")
+      return hanumanParivar(context);
+    if (_categorySelected.text == "Sabha") return samitiCategory(context);
+    if (_categorySelected.text == "Samasya/Sujhaav")
+      return samasyaCategory(context);
     return Container();
   }
+
   //hanumanParivar DropdownMenu
-  Widget hanumanParivar(BuildContext context){
+  Widget hanumanParivar(BuildContext context) {
     return TextFieldContainer(
       context,
       "Mobile Number/मोबाइल नंबर *",
@@ -527,8 +549,8 @@ class _NewClassScreenState extends State<NewClassScreen> {
     );
   }
 
-  //Samiti DropdownMenu
-  Widget samitiCategory(BuildContext context){
+  //Sabha DropdownMenu
+  Widget samitiCategory(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
     var topInsets = MediaQuery.of(context).viewInsets.top;
@@ -539,7 +561,7 @@ class _NewClassScreenState extends State<NewClassScreen> {
         TextFieldContainer(
           context,
           S.newClassMaleNumText,
-          3,
+          5,
           maleNumber,
           TextInputType.number,
         ),
@@ -549,7 +571,7 @@ class _NewClassScreenState extends State<NewClassScreen> {
         TextFieldContainer(
           context,
           S.newClassFemaleNumText,
-          3,
+          5,
           femaleNumber,
           TextInputType.number,
         ),
@@ -558,7 +580,7 @@ class _NewClassScreenState extends State<NewClassScreen> {
         ),
         TextFieldContainer(
           context,
-          "Name of Vakta *",
+          "Name of Vakta/वक्ता का नाम *",
           30,
           _vaktaName,
           TextInputType.text,
@@ -568,7 +590,7 @@ class _NewClassScreenState extends State<NewClassScreen> {
         ),
         TextFieldContainer(
           context,
-          "Mobile Number/मोबाइल नंबर *",
+          "Vakta's Mobile Number/वक्ता का मोबाइल नंबर *",
           10,
           _userPhoneNumber,
           TextInputType.number,
@@ -577,8 +599,8 @@ class _NewClassScreenState extends State<NewClassScreen> {
     );
   }
 
-  //Samasya /Sujhav dropdownlist
-  Widget samasyaCategory(BuildContext context){
+  // Samasya/Sujhav dropdownlist
+  Widget samasyaCategory(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
     var topInsets = MediaQuery.of(context).viewInsets.top;
@@ -621,7 +643,7 @@ class _NewClassScreenState extends State<NewClassScreen> {
         ),
         TextFieldContainer(
           context,
-          "Name of Person *",
+          "Name of Person*",
           30,
           _vaktaName,
           TextInputType.text,
@@ -631,7 +653,7 @@ class _NewClassScreenState extends State<NewClassScreen> {
         ),
         TextFieldContainer(
           context,
-          "Mobile Number/मोबाइल नंबर *",
+          "Mobile Number/मोबाइल नंबर*",
           10,
           _userPhoneNumber,
           TextInputType.number,
@@ -643,16 +665,16 @@ class _NewClassScreenState extends State<NewClassScreen> {
           context,
           probCategorySelectionList,
           _probCategory,
-          "Samasya/Sujhaav Category *",
+          "Samasya/Sujhaav Category*",
           true,
-              () => {},
+          () => {},
         ),
         SizedBox(
           height: useableHeight * 0.02,
         ),
         TextFieldContainer(
           context,
-          "Detail of Problem *",
+          "Detail of Problem*",
           300,
           _problemDesc,
           TextInputType.text,
@@ -882,14 +904,15 @@ class _NewClassScreenState extends State<NewClassScreen> {
       print("MEMERR12");
     }
   }
+
   Widget dropDownMenu(
-      BuildContext context,
-      List<String> dropDownList,
-      TextEditingController _textCtr,
-      String hintText,
-      bool callFunction,
-      functionCall(),
-      ) {
+    BuildContext context,
+    List<String> dropDownList,
+    TextEditingController _textCtr,
+    String hintText,
+    bool callFunction,
+    functionCall(),
+  ) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
     var topInsets = MediaQuery.of(context).viewInsets.top;
@@ -917,9 +940,9 @@ class _NewClassScreenState extends State<NewClassScreen> {
             child: _textCtr.text.length == 0
                 ? Text("${hintText}")
                 : Text(
-              "${_textCtr.text}",
-              style: TextStyle(color: Colors.black),
-            ),
+                    "${_textCtr.text}",
+                    style: TextStyle(color: Colors.black),
+                  ),
           ),
           isDense: true,
           isExpanded: true,
@@ -937,15 +960,16 @@ class _NewClassScreenState extends State<NewClassScreen> {
       ),
     );
   }
+
   DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
-    value: item,
-    child: Text(
-      item,
-      style: TextStyle(
-        fontWeight: FontWeight.normal,
-      ),
-    ),
-  );
+        value: item,
+        child: Text(
+          item,
+          style: TextStyle(
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+      );
 }
 
 class FacePainter extends CustomPainter {

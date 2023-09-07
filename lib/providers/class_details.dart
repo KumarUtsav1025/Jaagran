@@ -40,16 +40,12 @@ class ClassDetails with ChangeNotifier {
 
     final urlLink = Uri.https(
       'ekalgsrepo-db-default-rtdb.firebaseio.com',
-      '/ExistingUser/${loggedInUserId}/userClassInformation.json',
+      '/Events/${loggedInUserId}.json',
     );
 
     final urlLinkForCompleteClassDetails = Uri.https(
       'ekalgsrepo-db-default-rtdb.firebaseio.com',
       '/CompleteClassDetails/${loggedInUserId}/${DateFormat.jm().format(DateTime.now()).toString()}.json',
-    );
-
-    final urlParse = Uri.parse(
-      'https://ekalgsrepo-db-default-rtdb.firebaseio.com/ExistingUser/${loggedInUserId}/userClassInformation.json',
     );
 
     String imageName =
@@ -85,67 +81,19 @@ class ClassDetails with ChangeNotifier {
             'currLongitude': classInfo.currLongitude.toString(),
             'currAddress': classInfo.currAddress.toString(),
             'imageLink': classroomImageUrl.toString(),
+            'eventType': classInfo.eventType.toString(),
+            'maleNumber': classInfo.maleNumber.toString(),
+            'femaleNumber': classInfo.femaleNumber.toString(),
+            'vaktaName': classInfo.vaktaName.toString(),
+            'mobileNumber': classInfo.mobileNumber.toString(),
+            'subEventType': classInfo.subEventType.toString(),
+            'nameOfPerson': classInfo.nameOfPerson.toString(),
+            'problemDetails': classInfo.problemDetails.toString()
           },
         ),
       );
-
-      if (this._items.length % 2 != 0) {
-        DateTime t1 =
-            DateTime.parse(this._items[this._items.length - 1].currDateTime);
-        DateTime t2 = DateTime.parse(classInfo.currDateTime.toString());
-        final diff_hr = t2.difference(t1).inHours;
-        final diff_mn = t2.difference(t1).inMinutes;
-        final rmn_mn = diff_mn - (diff_hr*60);
-
-        String classDuration = "";
-        if (diff_hr == 0) {
-          classDuration = "${diff_mn} min";
-        } else if (diff_mn == 0) {
-          classDuration = "${diff_hr} hr";
-        } else {
-          classDuration = "${diff_hr} hr ${rmn_mn} min";
-        }
-
-        final responseForCompleteClassDetails = await http.post(
-          urlLinkForCompleteClassDetails,
-          body: json.encode(
-            {
-              'currDateTime_1':
-                  this._items[this._items.length - 1].currDateTime.toString(),
-              'currTime_1':
-                  this._items[this._items.length - 1].currTime.toString(),
-              'currDate_1':
-                  this._items[this._items.length - 1].currDate.toString(),
-              'numberOfHeads_1':
-                  this._items[this._items.length - 1].numOfStudents.toString(),
-              'currLatitude_1':
-                  this._items[this._items.length - 1].currLatitude.toString(),
-              'currLongitude_1':
-                  this._items[this._items.length - 1].currLongitude.toString(),
-              'currAddress_1':
-                  this._items[this._items.length - 1].currAddress.toString(),
-              'imageLink_1':
-                  this._items[this._items.length - 1].classroomUrl.toString(),
-
-              'currDateTime_2': classInfo.currDateTime.toString(),
-              'currTime_2': classInfo.currTime.toString(),
-              'currDate_2': classInfo.currDate.toString(),
-              'numberOfHeads_2': classInfo.numOfStudents.toString(),
-              'currLatitude_2': classInfo.currLatitude.toString(),
-              'currLongitude_2': classInfo.currLongitude.toString(),
-              'currAddress_2': classInfo.currAddress.toString(),
-              'imageLink_2': classroomImageUrl.toString(),
-
-              'class_duration': classDuration,
-            },
-          ),
-        );
-      }
-
-      // _items.add(classInfo);
       notifyListeners();
     } catch (errorVal) {
-      print("Errorrrrrrrrrrrrr");
       print(errorVal);
     }
   }
@@ -159,11 +107,7 @@ class ClassDetails with ChangeNotifier {
 
     final urlLink = Uri.https(
       'ekalgsrepo-db-default-rtdb.firebaseio.com',
-      '/ExistingUser/${loggedInUserId}/userClassInformation.json',
-    );
-
-    final urlParse = Uri.parse(
-      'https://ekalgsrepo-db-default-rtdb.firebaseio.com/ExistingUser/${loggedInUserId}/userClassInformation.json',
+      '/Events/${loggedInUserId}.json',
     );
 
     try {
@@ -181,7 +125,7 @@ class ClassDetails with ChangeNotifier {
             // print(classData);
             // print('Out...');
 
-            ClassInformation prevClass = new ClassInformation(
+            ClassInformation prevClass = ClassInformation(
               unqId: classId,
               currDateTime: classData['currDateTime'],
               currTime: classData['currTime'],
@@ -192,6 +136,14 @@ class ClassDetails with ChangeNotifier {
               currAddress: classData['currAddress'],
               classroomUrl: classData['imageLink'],
               imageFile: File(""),
+              eventType: classData['eventType'],
+              maleNumber: classData['maleNumber'],
+              femaleNumber: classData['femaleNumber'],
+              vaktaName: classData['vaktaName'],
+              mobileNumber: classData['mobileNumber'],
+              subEventType: classData['subEventType'],
+              nameOfPerson: classData['nameOfPerson'],
+              problemDetails: classData['problemDetails']
             );
 
             loadedPreviousClasses.add(prevClass);
